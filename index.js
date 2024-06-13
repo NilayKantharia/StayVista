@@ -5,16 +5,19 @@ const {connectToMongo} = require('./connection');
 const path = require('path');
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const ejsMate = require('ejs-mate');
 const Listing = require('./models/listing');
 
 connectToMongo(process.env.mongoDBURL).then(() => console.log('MongoDB connected'));
 
 app.set("view engine", "ejs");
+app.engine('ejs',ejsMate)
 app.set("views", path.join(__dirname, "views"));
 
 
 app.use(express.urlencoded({extended: true}));
 app.use(methodOverride('_method'));
+app.use(express.static(path.join(__dirname, "/public")));
 
 app.get('/', (req, res) => {
     res.send("working!");
