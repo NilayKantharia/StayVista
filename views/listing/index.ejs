@@ -1,19 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StayVista</title>
-</head>
+<% layout("layouts/boilerplate") %>
 <body>
     <h3>All listings</h3>
-    <form action="/listing/new" method="GET">
+    <!-- <form action="/listing/new" method="GET">
         <button>Create New Listing</button>
-    </form>
-    <ul>
+    </form> -->
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
         <% for( let listing of allListing) { %>
-            <li><a href="/listing/<%= listing._id %>"><%= listing.title %></a></li>
+            <a href="/listing/<%= listing._id %>" class="listing-link">
+                <div class="card col">
+                    <img src="<%=listing.image %>" class="card-img-top" alt="Listing Image" style="height: 20rem;"/>
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                    <p class="card-text">
+                        <b><%= listing.title %> <br></b>
+                        &#x20B9 <%= listing.price.toLocaleString("en-IN") %> / night
+                    </p>
+                    </div>
+                </div>
+            </a>
         <% } %>
-    </ul>
+    </div>
+   
 </body>
-</html>
