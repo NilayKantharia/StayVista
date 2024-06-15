@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const Listing = require('./models/listing');
+const wrapAsync = require('./utils/wrapAsync.js')
+const ExpressError = require('./utils/ExpressError.js')
+const {listingSchema} = require('./schema.js')
 
 connectToMongo(process.env.mongoDBURL).then(() => console.log('MongoDB connected'));
 
@@ -23,48 +26,65 @@ app.get('/', (req, res) => {
     res.send("working!");
 })
 
-app.get('/listing', async(req, res) => {
+const validateListing = (req, res, next) => {
+    let {error} = listingSchema.validate(req.body);
+    if(error){
+        let errMsg = error.details.map((el) => el.message).join(", ");
+        throw new ExpressError(400, errMsg)
+    }else{
+        next();
+    }
+
+}
+
+app.get('/listing', wrapAsync(async(req, res) => {
     let allListing = await Listing.find({});
     res.render("./listing/index", {allListing});
-})
+    })
+)
 
 app.get("/listing/new", (req, res) => {
     res.render("./listing/new")
 })
 
-app.get("/listing/:id", async(req, res) => {
+app.get("/listing/:id", wrapAsync(async(req, res) => {
     let {id} = req.params;
     let listing = await Listing.findById(id);
     res.render("./listing/show", {listing});
 })
+)
 
-app.post("/listing", async(req, res) => {
+app.post("/listing",validateListing, wrapAsync(async(req, res, next) => {
     const {title, description, image, price, location, country} = req.body;
     const newListing = new Listing({title, description, image, price, location, country});
     await newListing.save();
     res.redirect("/listing")
-})
+    })
+)
 
-app.get('/listing/:id/edit', async(req, res) => {
+app.get('/listing/:id/edit', wrapAsync(async(req, res) => {
     const {id} = req.params;
     const listing = await Listing.findById(id);
     res.render('./listing/edit', {listing});
 })
+)
 
-app.put('/listing/:id', async(req, res) => {
+app.put('/listing/:id', validateListing, wrapAsync(async(req, res) => {
     const {id} = req.params;
     const {title, description, image, price, location, country} = req.body;
     await Listing.findByIdAndUpdate(id, {title, description, image, price, location, country});
     res.redirect(`/listing/${id}`)
 })
+)
 
-app.delete('/listing/:id', async(req, res) => {
+app.delete('/listing/:id', wrapAsync(async(req, res) => {
     const {id} = req.params;
     await Listing.findByIdAndDelete(id);
     res.redirect('/listing')
 })
+)
 
-app.get('/testingroute', async (req, res) => {
+app.get('/testingroute', wrapAsync(async (req, res) => {
     let sampleListing = new Listing({
         title: "New Villa",
         description: "Near the beach",
@@ -75,6 +95,17 @@ app.get('/testingroute', async (req, res) => {
 
     await sampleListing.save();
     res.send("Success")
+})
+)
+
+app.all('*', (req, res, next) => {
+    next(new ExpressError(404, "Page Not Found!"))
+})
+
+app.use((err, req, res, next) => {
+    let{statusCode = 500, message = "Something Went Wrong!"} = err;
+    res.status(statusCode).render("error.ejs", {message})
+    // res.status(statusCode).send(message)
 })
 
 app.listen(process.env.Port, () => console.log(`Server started at Port: ${process.env.Port}`))
