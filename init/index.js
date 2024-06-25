@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const initdata = require("./data");
+const initdata = require("./data2");
 const Listing = require("../models/listing");
 require('dotenv').config();
 const {connectToMongo} = require('../connection');
