@@ -6,8 +6,11 @@
         align-items: center;
     }
     .filter{
+        text-decoration: none;
+        border: none;
+        background-color: white;
         text-align: center;
-        margin: 2rem 1rem;
+        margin: 2rem 0.7rem;
         opacity: 0.7;
         margin-bottom: 0;
     }
@@ -32,51 +35,105 @@
         margin-left: 3rem;
     }
 </style>
-<form action="/listing" method="get">
 <div id="filters">
-    <div class="filter">
-        <div><i class="fa-solid fa-fire"></i></div>
-        <p>Trending</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-fire"></i></div>
+                <p>Trending</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-bed"></i></div>
-        <p>Rooms</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-bed"></i></div>
+                <p>Rooms</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-mountain-city"></i></div>
-        <p>Iconic Cities</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-mountain-city"></i></div>
+                <p>Iconic Cities</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-mountain-sun"></i></div>
-        <p>Mountains</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-mountain-sun"></i></div>
+                <p>Mountains</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-brands fa-fort-awesome"></i></div>
-        <p>Castles</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-brands fa-fort-awesome"></i></div>
+                <p>Castles</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-person-swimming"></i></div>
-        <p>Amazing Pools</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-person-swimming"></i></div>
+                <p>Amazing Pools</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-campground"></i></div>
-        <p>Camping</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-campground"></i></div>
+                <p>Camping</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-cow"></i></div>
-        <p>Farms</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-cow"></i></div>
+                <p>Farms</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-snowflake"></i></div>
-        <p>Arctic</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-snowflake"></i></div>
+                <p>Arctic</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-igloo"></i></div>
-        <p>Domes</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-igloo"></i></div>
+                <p>Domes</p>
+            </button>
+        </form>
     </div>
-    <div class="filter">
-        <div><i class="fa-solid fa-ship"></i></div>
-        <p>Boats</p>
+    <div>
+        <form action="/listing" method="get">
+            <input type="hidden" name="category" value="Trending">
+            <button class="filter">
+                <div><i class="fa-solid fa-ship"></i></div>
+                <p>Boats</p>
+            </button>
+        </form>
     </div>
     <div class="tax-toggle">
         <div class="form-check-reverse form-switch">
@@ -85,7 +142,6 @@
           </div>
     </div>
 </div>
-</form>
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for( let listing of allListing) { %>
         <a href="/listing/<%= listing._id %>" class="listing-link">
