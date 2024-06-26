@@ -32,10 +32,7 @@
         margin-left: 3rem;
     }
 </style>
-<!-- <h3>All listings</h3> -->
-<!-- <form action="/listing/new" method="GET">
-    <button>Create New Listing</button>
-</form> -->
+<form action="/listing" method="get">
 <div id="filters">
     <div class="filter">
         <div><i class="fa-solid fa-fire"></i></div>
@@ -88,6 +85,7 @@
           </div>
     </div>
 </div>
+</form>
 <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
     <% for( let listing of allListing) { %>
         <a href="/listing/<%= listing._id %>" class="listing-link">
