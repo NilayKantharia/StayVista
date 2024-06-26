@@ -4,7 +4,16 @@ const mapToken = process.env.MAP_TOKEN;
 const geocodingClient = mbxGeocoding({accessToken : mapToken});
 
 module.exports.index = async(req, res) => {
-    let allListing = await Listing.find({});
+    const category = req.body.category;
+    const country = req.body.search;
+    let allListing;
+    if(category){
+        allListing = await Listing.find({category});
+    }else if(country){
+        allListing = await Listing.find({country});
+    }else{
+        allListing = await Listing.find({});
+    }
     res.render("./listing/index", {allListing});
 }
 
@@ -26,15 +35,12 @@ module.exports.createListing = async(req, res, next) => {
     let response = await geocodingClient.forwardGeocode({
         query: req.body.location,
         limit: 1
-    })
-    .send()
-
-
+    }).send()
 
     let url = req.file.path;
     let filename = req.file.filename;
-    const {title, description, price, location, country} = req.body;
-    const newListing = new Listing({title, description, price, location, country});
+    const {title, description, price, location, country, category} = req.body;
+    const newListing = new Listing({title, description, price, location, country, category});
     newListing.image = {url, filename};
     newListing.owner = req.user._id;
     newListing.geometry = response.body.features[0].geometry;
@@ -56,15 +62,20 @@ module.exports.renderEditForm = async(req, res) => {
 }
 
 module.exports.updateListing = async(req, res) => {
+    let response = await geocodingClient.forwardGeocode({
+        query: req.body.location,
+        limit: 1
+    }).send()
     const {id} = req.params;
-    const {title, description, price, location, country} = req.body;
-    let listing = await Listing.findByIdAndUpdate(id, {title, description, price, location, country});
+    const {title, description, price, location, country, category} = req.body;
+    let listing = await Listing.findByIdAndUpdate(id, {title, description, price, location, country, category});
     if(typeof req.file !== "undefined"){
         let url = req.file.path;
         let filename = req.file.filename;
         listing.image = {url, filename};
-        await listing.save();
     }
+    listing.geometry = response.body.features[0].geometry;
+    await listing.save();
     req.flash("success", "Listing Updated!");
     res.redirect(`/listing/${id}`)
 }
